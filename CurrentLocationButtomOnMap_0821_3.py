@@ -13,7 +13,7 @@ geolocator = GoogleV3(api_key=api_key)
 st.title("현위치 지도 표시")
 
 # 위치 입력 필드
-user_input = st.text_input("위치 입력", "대전")  # 기본 입력 값을 대전으로 설정
+user_input = st.text_input("주소 검색", "대전")  # 기본 입력 값을 대전으로 설정
 
 # 사용자가 버튼을 클릭하여 위치를 확인
 if st.button("내 위치 찾기"):
