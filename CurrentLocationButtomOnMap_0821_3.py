@@ -1,32 +1,29 @@
-#주소검색을 통해 지도 이동
-
 import streamlit as st
+from geopy.geocoders import Nominatim
 import folium
-from streamlit_folium import st_folium
-from geopy.geocoders import GoogleV3
+from streamlit_folium import folium_static
 
-# Google Geocoding API 키 설정
-api_key = "AIzaSyCW-4kxARbJUxL3jmOz5dR5D-AabKhDJdc"  # 여기에 당신의 Google API 키를 입력하세요.
+# 타이틀 설정
+st.title("현위치 지도 표시")
 
-# 사용자 위치 입력
-st.sidebar.title("현위치 입력")
-location_input = st.sidebar.text_input("위치 입력 (예: 서울, 대전, New York)", "대전")
+# 위치 가져오기
+geolocator = Nominatim(user_agent="geoapiExercises")
+location = geolocator.geocode("대전")  # 기본 위치를 대전으로 설정
 
-# Geopy를 사용하여 입력된 위치의 좌표를 가져오기
-geolocator = GoogleV3(api_key=api_key)
-location = geolocator.geocode(location_input)
+# Geolocation API를 통해 사용자 위치 가져오기
+if st.button("내 위치 찾기"):
+    user_input = st.text_input("위치 입력", "")
+    if user_input:
+        location = geolocator.geocode(user_input)  # 사용자가 입력한 위치로 설정
 
-# Folium 지도 생성 (입력된 위치를 중심으로 설정)
 if location:
-    map_obj = folium.Map(
-        location=[location.latitude, location.longitude],  # 입력된 위치의 중심 좌표
-        zoom_start=12  # 줌 레벨 설정
-    )
+    st.write(f"위도: {location.latitude}, 경도: {location.longitude}")
 
-    # 현위치 마커 추가
-    folium.Marker([location.latitude, location.longitude], tooltip="Current Location").add_to(map_obj)
+    # 위치를 표시할 지도 생성
+    m = folium.Map(location=[location.latitude, location.longitude], zoom_start=15)
 
-    # Streamlit 앱에 지도 표시
-    st_folium(map_obj, width=800, height=600)
-else:
-    st.error("위치를 찾을 수 없습니다. 다시 입력해 주세요.")
+    # 현위치에 마커 표시
+    folium.Marker([location.latitude, location.longitude], tooltip="내 위치").add_to(m)
+
+    # 지도를 스트림릿 앱에 표시
+    folium_static(m)
