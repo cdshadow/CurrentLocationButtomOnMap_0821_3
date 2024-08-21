@@ -10,13 +10,13 @@ api_key = "AIzaSyCW-4kxARbJUxL3jmOz5dR5D-AabKhDJdc"  # 여기에 당신의 Googl
 geolocator = GoogleV3(api_key=api_key)
 
 # 타이틀 설정
-st.title("현위치 지도 표시")
+st.title("지도 검색")
 
 # 위치 입력 필드
 user_input = st.text_input("주소 검색", "대전")  # 기본 입력 값을 대전으로 설정
 
 # 사용자가 버튼을 클릭하여 위치를 확인
-if st.button("내 위치 찾기"):
+if st.button("주소 또는 시설명 검색"):
     if user_input:
         location = geolocator.geocode(user_input)  # 사용자가 입력한 위치로 설정
 
